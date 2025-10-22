@@ -1,7 +1,7 @@
 # Hệ thống Quản lý Sinh viên
 
 ## Tổng quan
-Dự án **Hệ thống Quản lý Sinh viên** là một ứng dụng Java giúp quản lý thông tin sinh viên một cách dễ dàng và hiệu quả. Người dùng có thể thêm, xem, sửa, xóa và tìm kiếm thông tin sinh viên. Dữ liệu có thể được lưu trữ và đọc từ file để tiện quản lý lâu dài.
+Dự án **Hệ thống Quản lý Sinh viên** là một ứng dụng Java giúp quản lý thông tin sinh viên. Người dùng có thể thêm, xem, sửa, xóa và tìm kiếm thông tin sinh viên. Dữ liệu được lưu trữ trong file CSV để tiện quản lý lâu dài.
 
 ---
 
@@ -12,7 +12,7 @@ Dự án **Hệ thống Quản lý Sinh viên** là một ứng dụng Java giú
    - Kiểm tra trùng MSSV trước khi thêm.
 
 2. **Hiển thị danh sách sinh viên**
-   - Hiển thị tất cả sinh viên hiện có trong hệ thống.
+   - Hiển thị tất cả sinh viên hiện có.
    - Có thể hiển thị dưới dạng bảng hoặc danh sách.
 
 3. **Tìm kiếm sinh viên**
@@ -27,9 +27,9 @@ Dự án **Hệ thống Quản lý Sinh viên** là một ứng dụng Java giú
    - Xóa sinh viên theo MSSV.
    - Hệ thống xác nhận trước khi xóa.
 
-6. **Lưu và đọc dữ liệu từ file**
-   - Dữ liệu sinh viên được lưu vào file `.txt` hoặc `.csv`.
-   - Khi mở ứng dụng, hệ thống có thể đọc dữ liệu từ file để khôi phục thông tin.
+6. **Lưu và đọc dữ liệu**
+   - Dữ liệu được lưu trong file `student.csv`.
+   - Hệ thống có thể đọc dữ liệu từ file khi khởi động.
 
 ---
 
@@ -37,19 +37,24 @@ Dự án **Hệ thống Quản lý Sinh viên** là một ứng dụng Java giú
 
 QuanLySinhVien/
 │
+├─ .classpath
+├─ .project
+├─ README.md
+├─ student.csv
+├─ bin/ # Thư mục chứa file .class sau khi biên dịch
 ├─ src/
+│ ├─ main/
+│ │ └─ Main.java # Điểm khởi chạy ứng dụng
 │ ├─ model/
-│ │ └─ SinhVien.java # Class sinh viên
+│ │ └─ Student.java # Class sinh viên
 │ ├─ service/
-│ │ └─ SinhVienService.java # Các phương thức quản lý sinh viên
-│ ├─ ui/
-│ │ └─ MainUI.java # Giao diện người dùng (console hoặc GUI)
-│ └─ Main.java # Điểm khởi chạy ứng dụng
-│
-├─ data/
-│ └─ sinhvien.txt # File lưu dữ liệu sinh viên
-│
-└─ README.md
+│ │ ├─ StudentService.java # Các phương thức quản lý sinh viên
+│ │ └─ FileService.java # Các phương thức đọc/ghi file
+│ ├─ utils/
+│ │ └─ InputUtils.java # Các phương thức nhập liệu tiện ích
+│ └─ view/
+│ ├─ MainMenu.java # Giao diện menu chính
+│ └─ StudentFrame.java # Giao diện chi tiết/sửa thông tin sinh viên
 
 yaml
 Sao chép mã
@@ -58,30 +63,26 @@ Sao chép mã
 
 ## Cách chạy
 
-1. Clone repository:
+1. Mở dự án trong IDE (IntelliJ IDEA, Eclipse, VSCode…).
 
-```bash
-git clone https://github.com/username/QuanLySinhVien.git
-Mở dự án trong IDE (IntelliJ IDEA, Eclipse, VSCode…).
+2. Biên dịch và chạy file `Main.java` trong thư mục `src/main`.
 
-Chạy file Main.java.
+3. Sử dụng menu để thao tác quản lý sinh viên.
 
-Sử dụng giao diện console hoặc GUI để thao tác quản lý sinh viên.
+---
 
-Công nghệ sử dụng
-Ngôn ngữ: Java 8+
+## Công nghệ sử dụng
 
-IDE gợi ý: IntelliJ IDEA, Eclipse, VSCode
+- Ngôn ngữ: Java 8+
+- IDE gợi ý: IntelliJ IDEA, Eclipse, VSCode
+- Lưu trữ dữ liệu: CSV (`student.csv`)
+- GUI: Console & Swing (`StudentFrame`)
 
-Lưu trữ dữ liệu: File text (.txt) hoặc CSV
+---
 
-GUI: Swing (nếu có giao diện đồ họa)
+## Hướng phát triển
 
-Hướng phát triển
-Thêm chức năng sắp xếp sinh viên theo điểm hoặc tên.
-
-Kết nối cơ sở dữ liệu (MySQL, SQLite) thay vì file.
-
-Thêm chức năng thống kê (tỷ lệ điểm giỏi, trung bình, yếu).
-
-Thêm xác thực dữ liệu người dùng (validation).
+- Thêm chức năng thống kê sinh viên theo điểm.
+- Kết nối cơ sở dữ liệu MySQL/SQLite.
+- Nâng cấp giao diện GUI trực quan hơn.
+- Thêm xác thực dữ liệu người dùng (validation).
