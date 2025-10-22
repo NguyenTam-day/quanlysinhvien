@@ -1,5 +1,12 @@
+package main;
+
+import javax.swing.SwingUtilities;
+import view.StudentFrame;
+
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        SwingUtilities.invokeLater(() -> {
+            new StudentFrame().setVisible(true);
+        });
     }
 }
