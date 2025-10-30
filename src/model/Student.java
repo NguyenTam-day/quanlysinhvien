@@ -66,40 +66,40 @@ public class Student {
     }
 
     // ✅ Hàm xuất 1 sinh viên thành 1 dòng CSV
-    public String toCSV() {
-        return escapeCsv(id) + "," + escapeCsv(name) + "," +
-                age + "," + gpa + "," + escapeCsv(className);
+    public String toTXT() {
+        return escapeTxt(id) + "," + escapeTxt(name) + "," +
+                age + "," + gpa + "," + escapeTxt(className);
     }
 
-    public static Student fromCSV(String line) {
+    public static Student fromTXT(String line) {
         if (line == null || line.isEmpty())
             return null;
 
-        String[] parts = line.split(",", -1);
+        String[] parts = line.split(" ", -1);
         if (parts.length < 5)
             return null;
 
-        String id = unescapeCsv(parts[0]);
-        String name = unescapeCsv(parts[1]);
+        String id = unescapeTxt(parts[0]);
+        String name = unescapeTxt(parts[1]);
         int age = Integer.parseInt(parts[2]);
         double gpa = Double.parseDouble(parts[3]);
-        String className = unescapeCsv(parts[4]);
+        String className = unescapeTxt(parts[4]);
 
         return new Student(id, name, age, gpa, className);
     }
 
     // ✅ Hàm hỗ trợ escape ký tự đặc biệt trong CSV
-    private static String escapeCsv(String s) {
+    private static String escapeTxt(String s) {
         if (s == null)
             return "";
-        if (s.contains(",") || s.contains("\"") || s.contains("\n")) {
+        if (s.contains(" ") || s.contains("\"") || s.contains("\n")) {
             return "\"" + s.replace("\"", "\"\"") + "\"";
         }
         return s;
     }
 
     // ✅ Hàm hỗ trợ đọc ngược lại (nếu cần import CSV)
-    public static String unescapeCsv(String s) {
+    public static String unescapeTxt(String s) {
         if (s == null)
             return "";
         s = s.trim();

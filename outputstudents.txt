@@ -1,0 +1,2 @@
+ID Name Age GPA Class
+2 ti 20 3.5 cntt2

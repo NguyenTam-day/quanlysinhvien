@@ -33,7 +33,7 @@ public class StudentService {
         if (findById(s.getId()).isPresent())
             return false;
         students.add(s);
-        save();
+        //save();
         return true;
     }
 
@@ -46,7 +46,7 @@ public class StudentService {
         s.setAge(newData.getAge());
         s.setGpa(newData.getGpa());
         s.setClassName(newData.getClassName());
-        save();
+        //save();
         return true;
     }
 
@@ -55,7 +55,7 @@ public class StudentService {
         if (!opt.isPresent())
             return false;
         students.remove(opt.get());
-        save();
+        //save();
         return true;
     }
 

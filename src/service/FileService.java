@@ -24,7 +24,7 @@ public class FileService {
         try (BufferedReader br = new BufferedReader(new FileReader(f))) {
             String line;
             while ((line = br.readLine()) != null) {
-                Student s = Student.fromCSV(line);
+                Student s = Student.fromTXT(line);
                 if (s != null) list.add(s);
             }
         } catch (IOException e) {
@@ -38,7 +38,7 @@ public class FileService {
         File f = new File(filePath);
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(f))) {
             for (Student s : list) {
-                bw.write(s.toCSV());
+                bw.write(s.toTXT());
                 bw.newLine();
             }
         } catch (IOException e) {
