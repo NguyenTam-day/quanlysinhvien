@@ -7,10 +7,14 @@ import java.io.*;
 import java.util.List;
 import java.util.ArrayList;
 import model.Student;
+import service.GradeService;
 import service.StudentService;
+import service.SubjectService;
 
 public class StudentFrame extends JFrame {
     private StudentService studentService;
+    private SubjectService subjectService;
+    private GradeService gradeService;
     private JTextField txtId, txtName, txtAge, txtGpa, txtClass, txtSearch;
     private JTable table;
     private DefaultTableModel tableModel;
@@ -34,14 +38,19 @@ public class StudentFrame extends JFrame {
         txtGpa = new JTextField();
         txtClass = new JTextField();
 
-        leftPanel.add(new JLabel("ID:")); leftPanel.add(txtId);
-        leftPanel.add(new JLabel("Name:")); leftPanel.add(txtName);
-        leftPanel.add(new JLabel("Age:")); leftPanel.add(txtAge);
-        leftPanel.add(new JLabel("GPA:")); leftPanel.add(txtGpa);
-        leftPanel.add(new JLabel("Class:")); leftPanel.add(txtClass);
+        leftPanel.add(new JLabel("ID:"));
+        leftPanel.add(txtId);
+        leftPanel.add(new JLabel("Name:"));
+        leftPanel.add(txtName);
+        leftPanel.add(new JLabel("Age:"));
+        leftPanel.add(txtAge);
+        leftPanel.add(new JLabel("GPA:"));
+        leftPanel.add(txtGpa);
+        leftPanel.add(new JLabel("Class:"));
+        leftPanel.add(txtClass);
 
         // ===== RIGHT PANEL (CÁC NÚT CHỨC NĂNG) =====
-        JPanel rightPanel = new JPanel(new GridLayout(4, 2, 10, 10));
+        JPanel rightPanel = new JPanel(new GridLayout(3, 2, 10, 10));
         rightPanel.setBorder(BorderFactory.createTitledBorder("Functions"));
 
         JButton btnAdd = new JButton("Add");
@@ -66,9 +75,22 @@ public class StudentFrame extends JFrame {
         JPanel topPanel = new JPanel(new GridLayout(1, 2, 10, 10));
         topPanel.add(leftPanel);
         topPanel.add(rightPanel);
+        // Trong phần Right Panel (bên phải)
+        JButton btnSubjects = new JButton("Manage Subjects");
+
+        rightPanel.add(btnSubjects);
+
+        // Thêm sự kiện cho 2 nút
+        btnSubjects.addActionListener(e -> {
+            // Khi nhấn, mở SubjectFrame
+            SwingUtilities.invokeLater(() -> {
+                SubjectFrame sf = new SubjectFrame();
+                sf.setVisible(true);
+            });
+        });
 
         // ===== TABLE HIỂN THỊ SINH VIÊN =====
-        String[] columns = {"ID", "Name", "Age", "GPA", "Class"};
+        String[] columns = { "ID", "Name", "Age", "GPA", "Class" };
         tableModel = new DefaultTableModel(columns, 0);
         table = new JTable(tableModel);
         JScrollPane scrollPane = new JScrollPane(table);
@@ -95,7 +117,8 @@ public class StudentFrame extends JFrame {
     private void addStudent() {
         try {
             String id = txtId.getText().trim();
-            if (id.isEmpty()) throw new Exception();
+            if (id.isEmpty())
+                throw new Exception();
             String name = txtName.getText().trim();
             int age = Integer.parseInt(txtAge.getText().trim());
             double gpa = Double.parseDouble(txtGpa.getText().trim());
@@ -173,33 +196,34 @@ public class StudentFrame extends JFrame {
     }
 
     private void exportToTXT() {
-    File file = new File("outputstudents.txt");
-    try (PrintWriter pw = new PrintWriter(file)) {
-        for (int i = 0; i < tableModel.getColumnCount(); i++) {
-            pw.print(tableModel.getColumnName(i));
-            if (i < tableModel.getColumnCount() - 1) pw.print(" ");
-        }
-        pw.println();
-
-        for (int i = 0; i < tableModel.getRowCount(); i++) {
-            for (int j = 0; j < tableModel.getColumnCount(); j++) {
-                pw.print(tableModel.getValueAt(i, j));
-                if (j < tableModel.getColumnCount() - 1) pw.print(" ");
+        File file = new File("outputstudents.txt");
+        try (PrintWriter pw = new PrintWriter(file)) {
+            for (int i = 0; i < tableModel.getColumnCount(); i++) {
+                pw.print(tableModel.getColumnName(i));
+                if (i < tableModel.getColumnCount() - 1)
+                    pw.print(" ");
             }
             pw.println();
+
+            for (int i = 0; i < tableModel.getRowCount(); i++) {
+                for (int j = 0; j < tableModel.getColumnCount(); j++) {
+                    pw.print(tableModel.getValueAt(i, j));
+                    if (j < tableModel.getColumnCount() - 1)
+                        pw.print(" ");
+                }
+                pw.println();
+            }
+
+            JOptionPane.showMessageDialog(this, "Export success! File saved to src/outputstudents.txt");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Export failed!");
         }
-
-        JOptionPane.showMessageDialog(this, "Export success! File saved to src/outputstudents.txt");
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Export failed!");
     }
-}
-
 
     private void loadTable(List<Student> list) {
         tableModel.setRowCount(0);
         for (Student s : list) {
-            tableModel.addRow(new Object[]{s.getId(), s.getName(), s.getAge(), s.getGpa(), s.getClassName()});
+            tableModel.addRow(new Object[] { s.getId(), s.getName(), s.getAge(), s.getGpa(), s.getClassName() });
         }
     }
 }
