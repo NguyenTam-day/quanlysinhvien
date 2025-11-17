@@ -91,68 +91,6 @@ public class Grade {
                 diemChuyenCan, diemBaiTap, diemGiuaKy, diemThucHanh, diemCuoiKy);
     }
 
-    // ============================
-    // EXPORT -> 1 DÒNG CSV
-    // ============================
-    public String toTXT() {
-        return escapeTxt(studentId) + "," +
-                escapeTxt(subjectId) + "," +
-                diemChuyenCan + "," +
-                diemBaiTap + "," +
-                diemGiuaKy + "," +
-                diemThucHanh + "," +
-                diemCuoiKy;
-    }
-
-    // ============================
-    // IMPORT -> TỪ 1 DÒNG CSV
-    // ============================
-    public static Grade fromTXT(String line) {
-        if (line == null || line.isEmpty())
-            return null;
-
-        String[] parts = line.split(",", -1);
-
-        if (parts.length < 7)
-            return null;
-
-        String studentId = unescapeTxt(parts[0]);
-        String subjectId = unescapeTxt(parts[1]);
-
-        double cc = Double.parseDouble(parts[2]);
-        double bt = Double.parseDouble(parts[3]);
-        double gk = Double.parseDouble(parts[4]);
-        double th = Double.parseDouble(parts[5]);
-        double ck = Double.parseDouble(parts[6]);
-
-        return new Grade(studentId, subjectId, cc, bt, gk, th, ck);
-    }
-
-    // ============================
-    // ESCAPE giống Student
-    // ============================
-    private static String escapeTxt(String s) {
-        if (s == null)
-            return "";
-        if (s.contains(" ") || s.contains("\"") || s.contains("\n") || s.contains(",")) {
-            return "\"" + s.replace("\"", "\"\"") + "\"";
-        }
-        return s;
-    }
-
-    private static String unescapeTxt(String s) {
-        if (s == null)
-            return "";
-        s = s.trim();
-        if (s.startsWith("\"") && s.endsWith("\"")) {
-            s = s.substring(1, s.length() - 1).replace("\"\"", "\"");
-        }
-        return s;
-    }
-
-    // ============================
-    // EQUALS -> 1 sinh viên + 1 môn = 1 record
-    // ============================
     @Override
     public boolean equals(Object o) {
         if (this == o)

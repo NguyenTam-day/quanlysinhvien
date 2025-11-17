@@ -20,7 +20,7 @@ public class StudentFrame extends JFrame {
     private DefaultTableModel tableModel;
 
     public StudentFrame() {
-        studentService = new StudentService("outputstudent.txt");
+        studentService = new StudentService();
 
         setTitle("Student Manager");
         setSize(950, 600);

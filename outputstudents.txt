@@ -1,2 +1,3 @@
 ID Name Age GPA Class
-2 ti 20 3.5 cntt2
+S001 Nguyen Van A 20 3.2 CSE1
+S002 Tran Thi B 21 3.5 CSE2

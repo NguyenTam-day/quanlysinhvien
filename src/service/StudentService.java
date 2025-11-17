@@ -2,82 +2,133 @@ package service;
 
 import model.Student;
 
+import java.sql.*;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class StudentService {
-    private List<Student> students;
-    private FileStudentService fileService;
 
-    public StudentService(String filePath) {
-        fileService = new FileStudentService(filePath);
-        students = fileService.load();
-        if (students == null)
-            students = new ArrayList<>();
+    private final String url = "jdbc:mysql://localhost:3306/quanlysinhvien";
+    private final String user = "root";
+    private final String password = "Nguyenductam123!";
+
+    public StudentService() {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver"); // load driver
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(url, user, password);
     }
 
     public List<Student> findAll() {
-        return new ArrayList<>(students);
+        List<Student> list = new ArrayList<>();
+        String sql = "SELECT * FROM students";
+        try (Connection conn = getConnection();
+                Statement st = conn.createStatement();
+                ResultSet rs = st.executeQuery(sql)) {
+
+            while (rs.next()) {
+                list.add(extractStudent(rs));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 
-    public Optional<Student> findById(String id) {
-        return students.stream().filter(s -> s.getId().equals(id)).findFirst();
+    public void addStudent(Student s) {
+        String sql = "INSERT INTO students(id, name, age, gpa, className) VALUES (?, ?, ?, ?, ?)";
+        try (Connection conn = getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, s.getId());
+            ps.setString(2, s.getName());
+            ps.setInt(3, s.getAge());
+            ps.setDouble(4, s.getGpa());
+            ps.setString(5, s.getClassName());
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
-    public boolean addStudent(Student s) {
-        if (s == null)
-            return false;
-        if (findById(s.getId()).isPresent())
-            return false;
-        students.add(s);
-        // save();
-        return true;
+    public void updateStudent(String id, Student s) {
+        String sql = "UPDATE students SET name=?, age=?, gpa=?, className=? WHERE id=?";
+        try (Connection conn = getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, s.getName());
+            ps.setInt(2, s.getAge());
+            ps.setDouble(3, s.getGpa());
+            ps.setString(4, s.getClassName());
+            ps.setString(5, id);
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
-    public boolean updateStudent(String id, Student newData) {
-        Optional<Student> opt = findById(id);
-        if (!opt.isPresent())
-            return false;
-        Student s = opt.get();
-        s.setName(newData.getName());
-        s.setAge(newData.getAge());
-        s.setGpa(newData.getGpa());
-        s.setClassName(newData.getClassName());
-        // save();
-        return true;
-    }
+    public void deleteStudent(String id) {
+        String sql = "DELETE FROM students WHERE id=?";
+        try (Connection conn = getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
 
-    public boolean deleteStudent(String id) {
-        Optional<Student> opt = findById(id);
-        if (!opt.isPresent())
-            return false;
-        students.remove(opt.get());
-        // save();
-        return true;
+            ps.setString(1, id);
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public List<Student> searchByName(String keyword) {
-        String k = keyword == null ? "" : keyword.toLowerCase();
-        return students.stream().filter(s -> s.getName().toLowerCase().contains(k)).collect(Collectors.toList());
+        List<Student> list = new ArrayList<>();
+        String sql = "SELECT * FROM students WHERE name LIKE ?";
+        try (Connection conn = getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, "%" + keyword + "%");
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(extractStudent(rs));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 
     public List<Student> sortByName() {
-        return students.stream().sorted(Comparator.comparing(Student::getName, String.CASE_INSENSITIVE_ORDER))
-                .collect(Collectors.toList());
-    }
+        List<Student> list = new ArrayList<>();
+        String sql = "SELECT * FROM students ORDER BY name ASC";
+        try (Connection conn = getConnection();
+                Statement st = conn.createStatement();
+                ResultSet rs = st.executeQuery(sql)) {
 
-    public void save() {
-        fileService.save(students);
-    }
+            while (rs.next()) {
+                list.add(extractStudent(rs));
+            }
 
-    public String getAllStudentsAsString() {
-        StringBuilder sb = new StringBuilder();
-        for (Student s : students) {
-            sb.append(s.toString()).append("\n");
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        return sb.toString();
+        return list;
+    }
+
+    private Student extractStudent(ResultSet rs) throws SQLException {
+        return new Student(
+                rs.getString("id"),
+                rs.getString("name"),
+                rs.getInt("age"),
+                rs.getDouble("gpa"),
+                rs.getString("className"));
     }
 }

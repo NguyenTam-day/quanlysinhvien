@@ -18,7 +18,7 @@ public class SubjectFrame extends JFrame {
     private DefaultTableModel tableModel;
 
     public SubjectFrame() {
-        subjectService = new SubjectService(new FileSubjectService("outputsubject.txt"));
+        subjectService = new SubjectService();
 
         setTitle("Subject Manager");
         setSize(700, 500);

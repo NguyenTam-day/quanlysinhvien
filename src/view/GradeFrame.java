@@ -18,7 +18,7 @@ public class GradeFrame extends JFrame {
     private DefaultTableModel tableModel;
 
     public GradeFrame() {
-        gradeService = new GradeService(new FileGradeService("outputgrade.txt"));
+        gradeService = new GradeService();
 
         setTitle("Grade Manager");
         setSize(900, 500);

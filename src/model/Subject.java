@@ -46,60 +46,6 @@ public class Subject {
         return String.format("%s | %s | %d", maMon, tenMon, soTinChi);
     }
 
-    // ============================
-    // EXPORT -> 1 DÒNG CSV
-    // ============================
-    public String toTXT() {
-        return escapeTxt(maMon) + "," +
-                escapeTxt(tenMon) + "," +
-                soTinChi;
-    }
-
-    // ============================
-    // IMPORT -> TỪ 1 DÒNG CSV
-    // ============================
-    public static Subject fromTXT(String line) {
-        if (line == null || line.isEmpty())
-            return null;
-
-        // CSV ngăn cách bằng dấu phẩy nên split ","
-        String[] parts = line.split(",", -1);
-
-        if (parts.length < 3)
-            return null;
-
-        String maMon = unescapeTxt(parts[0]);
-        String tenMon = unescapeTxt(parts[1]);
-        int soTinChi = Integer.parseInt(parts[2]);
-
-        return new Subject(maMon, tenMon, soTinChi);
-    }
-
-    // ============================
-    // ESCAPE giống Student
-    // ============================
-    private static String escapeTxt(String s) {
-        if (s == null)
-            return "";
-        if (s.contains(" ") || s.contains("\"") || s.contains("\n") || s.contains(",")) {
-            return "\"" + s.replace("\"", "\"\"") + "\"";
-        }
-        return s;
-    }
-
-    private static String unescapeTxt(String s) {
-        if (s == null)
-            return "";
-        s = s.trim();
-        if (s.startsWith("\"") && s.endsWith("\"")) {
-            s = s.substring(1, s.length() - 1).replace("\"\"", "\"");
-        }
-        return s;
-    }
-
-    // ============================
-    // EQUALS -> so sánh theo mã môn
-    // ============================
     @Override
     public boolean equals(Object o) {
         if (this == o)
