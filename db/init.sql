@@ -71,7 +71,7 @@ INSERT INTO subjects(maMon, tenMon, soTinChi) VALUES
 ('M015','Tieng Anh 2',2);
 
 -- Dữ liệu mẫu bảng điểm
-INSERT INTO grades(studentid, maMon, diemCC, diemBT, diemGK, diemTH, diemCK) VALUES
+INSERT INTO grades(student_id, subject_id, diemCC, diemBT, diemGK, diemTH, diemCK) VALUES
 ('S001','M001',8,7,6,9,8),
 ('S002','M001',7,8,7,8,9),
 ('S003','M001',6,7,6,7,6),
