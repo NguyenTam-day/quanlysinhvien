@@ -2,6 +2,7 @@ package view;
 
 import model.Subject;
 import service.SubjectService;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -24,7 +25,6 @@ public class SubjectFrame extends JFrame {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
 
-        // ===== LEFT FORM =====
         JPanel leftPanel = new JPanel(new GridLayout(3, 2, 5, 5));
         leftPanel.setBorder(BorderFactory.createTitledBorder("Subject Info"));
 
@@ -39,7 +39,6 @@ public class SubjectFrame extends JFrame {
         leftPanel.add(new JLabel("Số tín chỉ:"));
         leftPanel.add(txtSoTinChi);
 
-        // ===== RIGHT PANEL =====
         JPanel rightPanel = new JPanel(new GridLayout(3, 2, 10, 10));
         rightPanel.setBorder(BorderFactory.createTitledBorder("Functions"));
 
@@ -61,36 +60,31 @@ public class SubjectFrame extends JFrame {
         rightPanel.add(btnImport);
         rightPanel.add(btnExport);
 
-        // ===== TOP PANEL =====
         JPanel topPanel = new JPanel(new GridLayout(1, 2, 10, 10));
         topPanel.add(leftPanel);
         topPanel.add(rightPanel);
-        // Trong phần Right Panel (bên phải)
+
         JButton btnGrades = new JButton("Manage Grades");
 
         rightPanel.add(btnGrades);
 
-        // Thêm sự kiện cho 2 nút
         btnGrades.addActionListener(e -> {
-            // Khi nhấn, mở SubjectFrame
+
             SwingUtilities.invokeLater(() -> {
                 GradeFrame sf = new GradeFrame();
                 sf.setVisible(true);
             });
         });
 
-        // ===== TABLE =====
         String[] columns = { "Mã môn", "Tên môn", "Số tín chỉ" };
         tableModel = new DefaultTableModel(columns, 0);
         table = new JTable(tableModel);
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setBorder(BorderFactory.createTitledBorder("Subject List"));
 
-        // ===== ADD TO FRAME =====
         add(topPanel, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
 
-        // ===== EVENTS =====
         btnAdd.addActionListener(e -> addSubject());
         btnUpdate.addActionListener(e -> updateSubject());
         btnDelete.addActionListener(e -> deleteSubject());

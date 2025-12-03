@@ -7,28 +7,36 @@ import java.io.*;
 import java.util.List;
 import java.util.ArrayList;
 import model.Student;
+import service.ClassroomService;
 import service.GradeService;
 import service.StudentService;
 import service.SubjectService;
+import service.MajorService;
 
 public class StudentFrame extends JFrame {
     private StudentService studentService;
     private SubjectService subjectService;
     private GradeService gradeService;
+    private MajorService majorService;
+    private ClassroomService classroomService;
     private JTextField txtId, txtName, txtAge, txtGpa, txtClass, txtSearch;
     private JTable table;
     private DefaultTableModel tableModel;
 
     public StudentFrame() {
+
         studentService = new StudentService();
+        subjectService = new SubjectService();
+        gradeService = new GradeService();
+        majorService = new MajorService();
+        classroomService = new ClassroomService(); 
 
         setTitle("Student Manager");
-        setSize(950, 600);
+        setSize(1000, 650); 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout(10, 10));
 
-        // ===== LEFT FORM (NHẬP LIỆU) =====
         JPanel leftPanel = new JPanel(new GridLayout(5, 2, 5, 5));
         leftPanel.setBorder(BorderFactory.createTitledBorder("Student Info"));
 
@@ -46,61 +54,91 @@ public class StudentFrame extends JFrame {
         leftPanel.add(txtAge);
         leftPanel.add(new JLabel("GPA:"));
         leftPanel.add(txtGpa);
-        leftPanel.add(new JLabel("Class:"));
+        leftPanel.add(new JLabel("Class ID:")); 
         leftPanel.add(txtClass);
 
-        // ===== RIGHT PANEL (CÁC NÚT CHỨC NĂNG) =====
-        JPanel rightPanel = new JPanel(new GridLayout(3, 2, 10, 10));
+        JPanel rightPanel = new JPanel(new GridLayout(4, 3, 10, 10)); 
         rightPanel.setBorder(BorderFactory.createTitledBorder("Functions"));
 
         JButton btnAdd = new JButton("Add");
         JButton btnUpdate = new JButton("Update");
         JButton btnDelete = new JButton("Delete");
         JButton btnShow = new JButton("Show All");
-        JButton btnSearch = new JButton("Search");
+        JButton btnSearch = new JButton("Search by Name"); 
         JButton btnSort = new JButton("Sort by Name");
         JButton btnImport = new JButton("Import File");
         JButton btnExport = new JButton("Export File");
 
+        JButton btnSubjects = new JButton("Manage Subjects");
+        JButton btnMajor = new JButton("Manage Majors"); 
+        JButton btnClassroom = new JButton("Manage Classrooms"); 
+
         rightPanel.add(btnAdd);
         rightPanel.add(btnUpdate);
         rightPanel.add(btnDelete);
+        
         rightPanel.add(btnShow);
         rightPanel.add(btnSearch);
         rightPanel.add(btnSort);
+        
         rightPanel.add(btnImport);
         rightPanel.add(btnExport);
 
-        // ===== TOP PANEL GỘP 2 BÊN =====
+        rightPanel.add(btnSubjects);
+        rightPanel.add(btnMajor);
+        rightPanel.add(btnClassroom);
+
         JPanel topPanel = new JPanel(new GridLayout(1, 2, 10, 10));
         topPanel.add(leftPanel);
         topPanel.add(rightPanel);
-        // Trong phần Right Panel (bên phải)
-        JButton btnSubjects = new JButton("Manage Subjects");
 
-        rightPanel.add(btnSubjects);
-
-        // Thêm sự kiện cho 2 nút
+        
         btnSubjects.addActionListener(e -> {
-            // Khi nhấn, mở SubjectFrame
             SwingUtilities.invokeLater(() -> {
-                SubjectFrame sf = new SubjectFrame();
+
+                SubjectFrame sf = new SubjectFrame(); 
                 sf.setVisible(true);
             });
         });
+        
+        btnMajor.addActionListener(e -> {
+            SwingUtilities.invokeLater(() -> {
+                MajorFrame mf = new MajorFrame(); 
+                mf.setVisible(true);
+            });
+        });
+        
+        btnClassroom.addActionListener(e -> {
+            SwingUtilities.invokeLater(() -> {
 
-        // ===== TABLE HIỂN THỊ SINH VIÊN =====
-        String[] columns = { "ID", "Name", "Age", "GPA", "Class" };
+                ClassroomFrame clf = new ClassroomFrame(classroomService, majorService); 
+                clf.setVisible(true);
+            });
+        });
+
+        String[] columns = { "ID", "Name", "Age", "GPA", "Class" }; 
         tableModel = new DefaultTableModel(columns, 0);
         table = new JTable(tableModel);
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setBorder(BorderFactory.createTitledBorder("Student List"));
 
-        // ===== ADD TO FRAME =====
         add(topPanel, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
 
-        // ===== EVENTS =====
+        table.getSelectionModel().addListSelectionListener(e -> {
+
+            if (!e.getValueIsAdjusting() && table.getSelectedRow() != -1) {
+                int selectedRow = table.getSelectedRow();
+                txtId.setText(tableModel.getValueAt(selectedRow, 0).toString());
+                txtName.setText(tableModel.getValueAt(selectedRow, 1).toString());
+                txtAge.setText(tableModel.getValueAt(selectedRow, 2).toString());
+                txtGpa.setText(tableModel.getValueAt(selectedRow, 3).toString());
+
+                txtClass.setText(tableModel.getValueAt(selectedRow, 4).toString()); 
+
+            }
+        });
+        
         btnAdd.addActionListener(e -> addStudent());
         btnUpdate.addActionListener(e -> updateStudent());
         btnDelete.addActionListener(e -> deleteStudent());
@@ -113,21 +151,21 @@ public class StudentFrame extends JFrame {
         loadTable(studentService.findAll());
     }
 
-    // ===== CÁC CHỨC NĂNG =====
     private void addStudent() {
         try {
             String id = txtId.getText().trim();
             if (id.isEmpty())
-                throw new Exception();
+                throw new Exception("ID cannot be empty");
             String name = txtName.getText().trim();
             int age = Integer.parseInt(txtAge.getText().trim());
             double gpa = Double.parseDouble(txtGpa.getText().trim());
-            String className = txtClass.getText().trim();
-            Student s = new Student(id, name, age, gpa, className);
+            String classId = txtClass.getText().trim(); 
+
+            Student s = new Student(id, name, age, gpa, classId, null); 
             studentService.addStudent(s);
             loadTable(studentService.findAll());
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Invalid input!");
+            JOptionPane.showMessageDialog(this, "Invalid input or missing ID/Class ID: " + e.getMessage());
         }
     }
 
@@ -141,8 +179,9 @@ public class StudentFrame extends JFrame {
             String name = txtName.getText().trim();
             int age = Integer.parseInt(txtAge.getText().trim());
             double gpa = Double.parseDouble(txtGpa.getText().trim());
-            String className = txtClass.getText().trim();
-            Student s = new Student(id, name, age, gpa, className);
+            String classId = txtClass.getText().trim();
+
+            Student s = new Student(id, name, age, gpa, classId, null); 
             studentService.updateStudent(id, s);
             loadTable(studentService.findAll());
         } catch (Exception e) {
@@ -179,23 +218,27 @@ public class StudentFrame extends JFrame {
             try (BufferedReader br = new BufferedReader(new FileReader(file))) {
                 String line;
                 while ((line = br.readLine()) != null) {
+
                     String[] p = line.trim().split("\\s+");
                     if (p.length == 5) {
+
                         studentService.addStudent(new Student(p[0], p[1],
                                 Integer.parseInt(p[2]),
                                 Double.parseDouble(p[3]),
-                                p[4]));
+                                p[4], 
+                                null)); 
                     }
                 }
                 JOptionPane.showMessageDialog(this, "Import success!");
                 loadTable(studentService.findAll());
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Import failed!");
+                JOptionPane.showMessageDialog(this, "Import failed: " + e.getMessage());
             }
         }
     }
 
     private void exportToTXT() {
+
         File file = new File("outputstudents.txt");
         try (PrintWriter pw = new PrintWriter(file)) {
             for (int i = 0; i < tableModel.getColumnCount(); i++) {
@@ -223,7 +266,14 @@ public class StudentFrame extends JFrame {
     private void loadTable(List<Student> list) {
         tableModel.setRowCount(0);
         for (Student s : list) {
-            tableModel.addRow(new Object[] { s.getId(), s.getName(), s.getAge(), s.getGpa(), s.getClassName() });
+
+            tableModel.addRow(new Object[] { 
+                s.getId(), 
+                s.getName(), 
+                s.getAge(), 
+                s.getGpa(), 
+                s.getClassName() 
+            });
         }
     }
 }

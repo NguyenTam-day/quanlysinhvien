@@ -14,7 +14,7 @@ public class SubjectService {
 
     public SubjectService() {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver"); // load driver
+            Class.forName("com.mysql.cj.jdbc.Driver"); 
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }

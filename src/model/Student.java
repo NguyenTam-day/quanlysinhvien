@@ -7,18 +7,30 @@ public class Student {
     private String name;
     private int age;
     private double gpa;
-    private String className;
+    private String classId; 
+    private String className; 
 
     public Student() {
     }
 
-    public Student(String id, String name, int age, double gpa, String className) {
+    public Student(String id, String name, int age, double gpa, String classInfo) {
         this.id = id;
         this.name = name;
         this.age = age;
         this.gpa = gpa;
+        this.classId = classInfo; 
+        this.className = classInfo; 
+    }
+
+    public Student(String id, String name, int age, double gpa, String classId, String className) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+        this.gpa = gpa;
+        this.classId = classId;
         this.className = className;
     }
+
 
     public String getId() {
         return id;
@@ -50,6 +62,13 @@ public class Student {
 
     public void setGpa(double gpa) {
         this.gpa = gpa;
+    }
+    public String getClassId() {
+        return classId;
+    }
+
+    public void setClassId(String classId) {
+        this.classId = classId;
     }
 
     public String getClassName() {

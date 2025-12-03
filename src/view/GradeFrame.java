@@ -25,7 +25,6 @@ public class GradeFrame extends JFrame {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
 
-        // ===== LEFT FORM =====
         JPanel leftPanel = new JPanel(new GridLayout(7, 2, 5, 5));
         leftPanel.setBorder(BorderFactory.createTitledBorder("Grade Info"));
 
@@ -52,7 +51,6 @@ public class GradeFrame extends JFrame {
         leftPanel.add(new JLabel("Điểm CK:"));
         leftPanel.add(txtCK);
 
-        // ===== RIGHT PANEL =====
         JPanel rightPanel = new JPanel(new GridLayout(4, 2, 10, 10));
         rightPanel.setBorder(BorderFactory.createTitledBorder("Functions"));
 
@@ -74,23 +72,19 @@ public class GradeFrame extends JFrame {
         rightPanel.add(btnImport);
         rightPanel.add(btnExport);
 
-        // ===== TOP PANEL =====
         JPanel topPanel = new JPanel(new GridLayout(1, 2, 10, 10));
         topPanel.add(leftPanel);
         topPanel.add(rightPanel);
 
-        // ===== TABLE =====
         String[] columns = { "Student ID", "Subject ID", "CC", "BT", "GK", "TH", "CK" };
         tableModel = new DefaultTableModel(columns, 0);
         table = new JTable(tableModel);
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setBorder(BorderFactory.createTitledBorder("Grade List"));
 
-        // ===== ADD TO FRAME =====
         add(topPanel, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
 
-        // ===== EVENTS =====
         btnAdd.addActionListener(e -> addGrade());
         btnUpdate.addActionListener(e -> updateGrade());
         btnDelete.addActionListener(e -> deleteGrade());

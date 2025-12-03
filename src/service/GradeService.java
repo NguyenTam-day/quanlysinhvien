@@ -14,7 +14,7 @@ public class GradeService {
 
     public GradeService() {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver"); // load driver
+            Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -88,7 +88,6 @@ public class GradeService {
         }
     }
 
-    // ===== Tìm kiếm theo studentId =====
     public List<Grade> findByStudentId(String studentId) {
         List<Grade> list = new ArrayList<>();
         String sql = "SELECT * FROM grades WHERE student_id LIKE ?";
@@ -107,26 +106,7 @@ public class GradeService {
         return list;
     }
 
-    // ===== Tìm kiếm theo subjectId =====
-    public List<Grade> findBySubjectId(String subjectId) {
-        List<Grade> list = new ArrayList<>();
-        String sql = "SELECT * FROM grades WHERE subject_id LIKE ?";
-        try (Connection conn = getConnection();
-                PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setString(1, "%" + subjectId + "%");
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                list.add(extractGrade(rs));
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return list;
-    }
-
-    // ===== Sort theo studentId =====
     public List<Grade> sortByStudentId() {
         List<Grade> list = new ArrayList<>();
         String sql = "SELECT * FROM grades ORDER BY student_id ASC";
@@ -144,25 +124,6 @@ public class GradeService {
         return list;
     }
 
-    // ===== Sort theo subjectId =====
-    public List<Grade> sortBySubjectId() {
-        List<Grade> list = new ArrayList<>();
-        String sql = "SELECT * FROM grades ORDER BY subject_id ASC";
-        try (Connection conn = getConnection();
-                Statement st = conn.createStatement();
-                ResultSet rs = st.executeQuery(sql)) {
-
-            while (rs.next()) {
-                list.add(extractGrade(rs));
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return list;
-    }
-
-    // ===== Helper =====
     private Grade extractGrade(ResultSet rs) throws SQLException {
         return new Grade(
                 rs.getString("student_id"),
