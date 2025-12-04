@@ -1,5 +1,3 @@
-package main;
-
 import javax.swing.SwingUtilities;
 import view.LoginForm;
 
