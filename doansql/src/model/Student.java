@@ -1,67 +1,59 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model;
 
 import java.util.Objects;
 
-/**
- *
- * @author Admin
- */
 public class Student {
-    private String mssv;
-    private String hoten;
-    private int tuoi;
-    private String gioitinh;
+    private String id;
+    private String name;
+    private int age;
     private double gpa;
-    private int sdt;
-    private String email;
-    private String diachi;
+    private String classId; 
+    private String className; 
+
     public Student() {
     }
 
-    public Student(String mssv, String hoten, int tuoi, String gioitinh, int sdt,  String diachi, String email, double gpa) {
-        this.mssv = mssv;
-        this.hoten = hoten;
-        this.tuoi = tuoi;
-        this.gioitinh = gioitinh;
+    public Student(String id, String name, int age, double gpa, String classInfo) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
         this.gpa = gpa;
-        this.sdt = sdt;
-        this.email = email;
-        this.diachi = diachi;
-    }
-    public String getMssv() {
-        return mssv;
+        this.classId = classInfo; 
+        this.className = classInfo; 
     }
 
-    public void setMssv(String mssv) {
-        this.mssv = mssv;
+    public Student(String id, String name, int age, double gpa, String classId, String className) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+        this.gpa = gpa;
+        this.classId = classId;
+        this.className = className;
     }
 
-    public String getHoten() {
-        return hoten;
+
+    public String getId() {
+        return id;
     }
 
-    public void setHoten(String hoten) {
-        this.hoten = hoten;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public int getTuoi() {
-        return tuoi;
+    public String getName() {
+        return name;
     }
 
-    public void setTuoi(int tuoi) {
-        this.tuoi = tuoi;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getGioitinh() {
-        return gioitinh;
+    public int getAge() {
+        return age;
     }
 
-    public void setGioitinh(String gioitinh) {
-        this.gioitinh = gioitinh;
+    public void setAge(int age) {
+        this.age = age;
     }
 
     public double getGpa() {
@@ -71,55 +63,39 @@ public class Student {
     public void setGpa(double gpa) {
         this.gpa = gpa;
     }
-
-    public int getSdt() {
-        return sdt;
+    public String getClassId() {
+        return classId;
     }
 
-    public void setSdt(int sdt) {
-        this.sdt = sdt;
+    public void setClassId(String classId) {
+        this.classId = classId;
     }
 
-    public String getEmail() {
-        return email;
+    public String getClassName() {
+        return className;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setClassName(String className) {
+        this.className = className;
     }
-    public String getDiachi() {
-        return email;
-    }
-
-    public void setDiachi(String diachi) {
-        this.diachi = diachi;
-    }
-    
 
     @Override
     public String toString() {
-        return String.format("%s |%s |%s |%s |%s |%d |%s |%2f",mssv,hoten,tuoi,gioitinh,diachi,sdt,email, gpa);
+        return String.format("%s | %s | %d | %.2f | %s", id, name, age, gpa, className);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        Student student = (Student) o;
+        return Objects.equals(id, student.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(mssv);
+        return Objects.hash(id);
     }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Student other = (Student) obj;
-        return Objects.equals(this.mssv, other.mssv);
-    }
-    
-    
 }

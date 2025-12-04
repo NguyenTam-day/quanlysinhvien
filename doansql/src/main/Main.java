@@ -1,8 +1,7 @@
 package main;
 
 import javax.swing.SwingUtilities;
-import view.LoginForm;
-import view.MainFrame;
+import view.StudentFrame;
 
 public class Main {
     public static void main(String[] args) {
@@ -12,7 +11,7 @@ public class Main {
             e.printStackTrace();
         }
         SwingUtilities.invokeLater(() -> {
-            new LoginForm().setVisible(true);
+            new StudentFrame().setVisible(true);
         });
     }
 }

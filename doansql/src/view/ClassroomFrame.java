@@ -24,8 +24,8 @@ public class ClassroomFrame extends JFrame {
 
     private JTextField txtClassroomId;
     private JTextField txtClassroomName;
-    private JComboBox<String> cbMajorId; 
-    private Map<String, String> majorDisplayMap; 
+    private JComboBox<String> cbMajorId; // ComboBox hiển thị Major
+    private Map<String, String> majorDisplayMap; // Lưu trữ Major ID -> Chuỗi hiển thị (ID - Name)
     
     private JButton btnAdd, btnUpdate, btnDelete, btnClear;
 

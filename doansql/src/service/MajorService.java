@@ -23,6 +23,7 @@ public class MajorService {
     }
 
     public void addMajor(Major m) {
+        // Cột SQL: major_id, name
         String sql = "INSERT INTO majors(major_id, major_name) VALUES (?, ?)";
         try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
